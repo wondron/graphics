@@ -7,8 +7,10 @@
 #include "QTime"
 #include "QFontDatabase"
 #include "QPushButton"
+#include "QDir"
+#include "QApplication"
 
-#define ICONSIZE 40
+#define ICONSIZE 30
 
 WGraphicsView::WGraphicsView(QWidget *parent) : QGraphicsView(parent)
 {
@@ -21,9 +23,16 @@ WGraphicsView::WGraphicsView(QWidget *parent) : QGraphicsView(parent)
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     installEventFilter(this);
 
+    flowBgColor = QColor(150, 150, 150);
+    flowPressColor = QColor( 255, 0, 0);
     initPanel();
-    flowBgColor = "#0000a8";
-    flowPressColor = "#5EC7D9";
+    initScaleWidget();
+    initAimWidget();
+    connect(this, &WGraphicsView::scaleChanged, [this](qreal scale){
+        qDebug()<<"enter scalechange";
+        QString str = QString::number(scale*100, 'f', 1);
+        m_scaleLabel->setText(str + "%");
+    });
 }
 
 void WGraphicsView::wheelEvent(QWheelEvent *e)
@@ -46,6 +55,7 @@ void WGraphicsView::zoomIn(qreal level)
     QTransform matrix;
     matrix.scale(scale, scale);
     setTransform(matrix);
+    emit scaleChanged(scale);
 }
 
 void WGraphicsView::zoomOut(qreal level)
@@ -56,6 +66,7 @@ void WGraphicsView::zoomOut(qreal level)
     QTransform matrix;
     matrix.scale(scale, scale);
     setTransform(matrix);
+    emit scaleChanged(scale);
 }
 
 void WGraphicsView::fitScene()
@@ -109,9 +120,6 @@ void WGraphicsView::keyReleaseEvent(QKeyEvent *e)
 
 bool WGraphicsView::eventFilter(QObject *watched, QEvent *event)
 {
-    if (event->type() == QEvent::Paint) {
-        PaintOnWidget();
-    }
     return QWidget::eventFilter(watched, event);
 }
 
@@ -128,10 +136,14 @@ void WGraphicsView::leaveEvent(QEvent *)
 void WGraphicsView::resizeEvent(QResizeEvent *)
 {
     //重新设置顶部工具栏的位置和宽高,可以自行设置顶部显示或者底部显示
-    qDebug() << "resize widget";
-    m_panel->setGeometry(5, 5, this->width() - ICONSIZE, ICONSIZE);
+    m_panel->setGeometry(5, 5, this->width() - ICONSIZE , ICONSIZE + 5);
+    m_aimLabel->setGeometry(viewport()->rect().center().x() - m_aimLabel->width()/2,
+                              viewport()->rect().center().y() - m_aimLabel->height()/2,
+                              m_aimLabel->width(), m_aimLabel->height());
     //flowPanel->setGeometry(borderWidth, this->height() - height - borderWidth, this->width() - (borderWidth * 2), height);
-
+    m_scaleLabel->setGeometry(5,
+                              viewport()->rect().height()-m_scaleLabel->height(),
+                              m_scaleLabel->width(), m_scaleLabel->height());
 }
 
 void WGraphicsView::initPanel()
@@ -148,25 +160,28 @@ void WGraphicsView::initPanel()
     m_panel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     //按钮集合名称,如果需要新增按钮则在这里增加即可
-    QList<QString> btns;
-    btns << u8"适应" << u8"放大" << u8"缩小" << u8"显示基准线";
+    QList<QString> btns, imgName;
+    btns << u8"适应" << u8"放大" << u8"缩小"
+         << u8"定位中心" << u8"原始尺寸";
+    imgName << "Expand" << "Zoom In" << "Zoom Out"
+            << "Center Direction" << "Original Size";
 
     //循环添加顶部按钮
     for (int i = 0; i < btns.count(); i++) {
         QPushButton *btn = new QPushButton;
-        btn->setIconSize(QSize(40, 40));
-        QString str = QString("D:\\icon\\8010\\f%1.ico").arg(i + 1);
+        btn->setIconSize(QSize(ICONSIZE, ICONSIZE));
+        QString str = QString(":/new/icons/image/%1.png").arg(imgName[i]);
         btn->setIcon(QIcon(QPixmap(str)));
         btn->setToolTip(btns[i]);
         //绑定按钮单击事件,用来发出信号通知
-        connect(btn, SIGNAL(clicked(bool)), this, SLOT(btnClicked()));
+        //connect(btn, SIGNAL(clicked(bool)), this, SLOT(btnClicked()));
 
         //设置标识,用来区别按钮
         btn->setObjectName(btns.at(i));
 
         //设置固定宽度
-        btn->setFixedWidth(ICONSIZE + 1);
-        btn->setFixedHeight(ICONSIZE + 1);
+        btn->setFixedWidth(ICONSIZE + 2);
+        btn->setFixedHeight(ICONSIZE + 2);
 
         //设置拉伸策略使得填充
         btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
@@ -184,18 +199,34 @@ void WGraphicsView::initPanelStyle()
 {
     //设置样式以便区分,可以自行更改样式,也可以不用样式
     QStringList qss;
-    QString rgba = QString("rgba(0,0,0,150)");//.arg(flowBgColor.red()).arg(flowBgColor.green()).arg(flowBgColor.blue());
-    qss.append(QString("#flowPanel{background:%1;border:none;}").arg(rgba));
-    qss.append(QString("QPushButton{border:none;padding:0px;background:rgba(0,0,0,0);}"));
-    qss.append(QString("QPushButton:pressed{color:%1;}").arg(flowPressColor.name()));
+    QString rgba = QString("rgba(%1, %2, %3, 170)").arg(flowBgColor.red()).arg(flowBgColor.green()).arg(flowBgColor.blue());
+    //qss.append(QString("#flowPanel{background:%1;border:none;}").arg(rgba));
+    //qss.append(QString("QPushButton{border:none;padding:0px;background:rgba(0,0,0,0);}"));
+    //qss.append(QString("QPushButton:pressed{color:%1;}").arg(flowPressColor.name()));
+    qDebug() << "flowPressColor:" << flowPressColor << "rgba:" << flowBgColor.red();
     m_panel->setStyleSheet(qss.join(""));
 }
 
-void WGraphicsView::PaintOnWidget()
+void WGraphicsView::initScaleWidget()
 {
-    QPainter painter2(this);
-    QPen pen(QColor(0, 0, 0), 2);
-    painter2.setPen(pen);
-    QPoint center = viewport()->rect().center();
-    painter2.drawEllipse(center.x() - 2, center.y() - 2, 4, 4);
+    m_scaleLabel = new QLabel("100%",this);
+    QFont font("Arial");
+    font.setBold(true);
+    font.setPixelSize(16);
+    m_scaleLabel->setFont(font);
+    m_scaleLabel->setStyleSheet("color:#ff6600;");
+}
+
+void WGraphicsView::initAimWidget()
+{
+    m_aimLabel = new QLabel(this);
+    QImage img(":/new/icons/image/aims.png");
+    m_aimLabel->setFixedSize(img.width(), img.height());
+    m_aimLabel->setPixmap(QPixmap::fromImage(img));
+}
+
+void WGraphicsView::updateScaleInfo(qreal value)
+{
+    if(!m_scaleLabel) return;
+    m_scaleLabel->setText(QString("%1%").arg(value));
 }

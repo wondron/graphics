@@ -27,6 +27,6 @@ MainWindow::~MainWindow()
 void MainWindow::on_btn_image_clicked()
 {
     //QImage img("F:/img/0-3-4.bmp");
-    QImage img(R"(F:\img\0-3-4.bmp)");
+    QImage img(R"(F:\bizhi\8c2bd22b7ef41c83.jpg)");
     imageItem->setImage(img);
 }

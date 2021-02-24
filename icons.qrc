@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/new/icons">
+        <file>image/aims.png</file>
+        <file>image/Center Direction.png</file>
+        <file>image/Collapse.png</file>
+        <file>image/Expand.png</file>
+        <file>image/Original Size.png</file>
+        <file>image/Search.png</file>
+        <file>image/Zoom In.png</file>
+        <file>image/Zoom Out.png</file>
+        <file>image/Zoom to Actual Size.png</file>
+        <file>image/Zoom to Extents.png</file>
+        <file>image/aimsS.png</file>
+    </qresource>
+</RCC>

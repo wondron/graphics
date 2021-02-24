@@ -3,6 +3,8 @@
 
 #include <QGraphicsView>
 #include "QTimer"
+#include "QLabel"
+
 class WGraphicsView : public QGraphicsView
 {
     Q_OBJECT
@@ -27,18 +29,22 @@ protected:
 
 private:
     void initPanel();
+    void initScaleWidget();
     void initPanelStyle();
+    void initAimWidget();
 
 signals:
-    void scaleChanged(int);
+    void scaleChanged(qreal);
 
 public slots:
-    void PaintOnWidget();
+    void updateScaleInfo(qreal);
 
 private:
     QTimer *m_timer;
     int m_scale;
     QWidget *m_panel;
+    QLabel *m_scaleLabel;
+    QLabel *m_aimLabel;
     QColor flowBgColor;
     QColor flowPressColor;
 };
