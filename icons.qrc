@@ -3,15 +3,15 @@
         <file>image/aims.png</file>
         <file>image/Collapse.png</file>
         <file>image/Search.png</file>
-        <file>image/Zoom In.png</file>
-        <file>image/Zoom Out.png</file>
         <file>image/Zoom to Actual Size.png</file>
         <file>image/Zoom to Extents.png</file>
-        <file>image/Center Direction.png</file>
-        <file>image/Original Size.png</file>
-        <file>image/Expand.png</file>
         <file>image/printer.png</file>
         <file>image/OpenGL.png</file>
         <file>image/Antialiasing.png</file>
+        <file>image/ZoomIn.png</file>
+        <file>image/ZoomOut.png</file>
+        <file>image/Expand.png</file>
+        <file>image/centerDirection.png</file>
+        <file>image/originalSize.png</file>
     </qresource>
 </RCC>

@@ -21,6 +21,7 @@
 
 #define ICONSIZE 30
 
+namespace Graphics {
 WGraphicsView::WGraphicsView(QWidget *parent) : QGraphicsView(parent)
 {
     QTransform matrix;
@@ -32,6 +33,7 @@ WGraphicsView::WGraphicsView(QWidget *parent) : QGraphicsView(parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     installEventFilter(this);
 
     QPixmap pixmap(40, 40);
@@ -88,7 +90,6 @@ void WGraphicsView::zoom(qreal scale)
 
 void WGraphicsView::fitScene()
 {
-    qDebug()<<"enter fitscene";
     if (scene()) {
         auto rw = viewport()->size().width() / scene()->sceneRect().width();
         auto rh = viewport()->size().height() / scene()->sceneRect().height();
@@ -129,7 +130,6 @@ void WGraphicsView::setOpenGl(bool enabel)
 
 void WGraphicsView::setAntialiase(bool enabel)
 {
-    qDebug() << "antaliase:" << enabel;
     setRenderHint(QPainter::Antialiasing, enabel);
 }
 
@@ -165,4 +165,13 @@ void WGraphicsView::keyPressEvent(QKeyEvent *e)
 void WGraphicsView::keyReleaseEvent(QKeyEvent *e)
 {
     QGraphicsView::keyReleaseEvent(e);
+}
+
+void WGraphicsView::paintEvent(QPaintEvent *e)
+{
+    QGraphicsView::paintEvent(e);
+    QPainter painter(viewport());
+    painter.setPen(QPen(Qt::green, 2, Qt::SolidLine));
+    painter.drawRect(viewport()->rect());
+}
 }

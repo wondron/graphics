@@ -13,14 +13,16 @@ qtHaveModule(opengl): QT += opengl
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    wgraphicsscene.cpp \
     wgraphicsview.cpp \
-    wgraphicswight.cpp \
+    wgraphicswidget.cpp \
     wimageitem.cpp
 
 HEADERS += \
     mainwindow.h \
+    wgraphicsscene.h \
     wgraphicsview.h \
-    wgraphicswight.h \
+    wgraphicswidget.h \
     wimageitem.h
 
 FORMS += \

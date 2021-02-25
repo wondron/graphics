@@ -34,7 +34,6 @@ public slots:
 
 private:
     bool event(QEvent *ev) override;
-    QTimer *m_timer;
     int fpsNum = 0;
     QImage m_image;
     QPointF m_offset;

@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 #include "wimageitem.h"
-#include "wgraphicswight.h"
-#include "QGraphicsScene"
+#include "wgraphicswidget.h"
+#include "wgraphicsscene.h"
 #include "QTimer"
 #include "qdir.h"
 #include "QTime"
@@ -24,11 +24,12 @@ public:
 private slots:
     void on_btn_image_clicked();
 
+    void on_spinBox_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
-    Graphics::WImageItem *imageItem;
-    QGraphicsScene *m_Scene;
-    WGraphicsWiget *m_widget;
+    Graphics::WGraphicsScene *m_Scene;
+    Graphics::WGraphicsWidget *m_widget;
     QTimer timer;
     QTime* time;
     QDir* dir;

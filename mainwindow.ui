@@ -26,6 +26,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QSpinBox" name="spinBox">
+      <property name="value">
+       <number>50</number>
+      </property>
+     </widget>
+    </item>
+    <item>
      <layout class="QVBoxLayout" name="ver_layout"/>
     </item>
    </layout>

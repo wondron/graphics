@@ -31,12 +31,6 @@ private:
 WImageItem::WImageItem(QGraphicsItem *parent)
     : QGraphicsObject(parent)
 {
-    m_timer = new QTimer();
-    m_timer->start(1000);
-    connect(m_timer, &QTimer::timeout, [this]() {
-        emit imgchgeFps(fpsNum);
-        fpsNum = 0;
-    });
 }
 
 WImageItem::~WImageItem()
@@ -63,6 +57,7 @@ bool WImageItem::event(QEvent *ev)
 
         if (flag) {
             scene()->setSceneRect(boundingRect());
+            //qDebug()<<"image size dif";
             emit imgSizeDif();
         }
 

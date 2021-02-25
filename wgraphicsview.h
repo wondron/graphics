@@ -1,9 +1,10 @@
-﻿#ifndef WGRAPHICSVIEW_H
-#define WGRAPHICSVIEW_H
+﻿#pragma once
 
 #include <QGraphicsView>
 #include "QTimer"
 #include "QLabel"
+
+namespace Graphics {
 
 class WGraphicsView : public QGraphicsView
 {
@@ -29,6 +30,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+    void paintEvent(QPaintEvent* e) override;
 
 private:
 
@@ -42,4 +44,4 @@ private:
     QTimer *m_timer;
 };
 
-#endif // WGRAPHICSVIEW_H
+}
