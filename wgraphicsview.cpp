@@ -30,8 +30,8 @@ WGraphicsView::WGraphicsView(QWidget *parent) : QGraphicsView(parent)
     setRenderHint(QPainter::Antialiasing, false);
     setOptimizationFlags(QGraphicsView::DontSavePainterState);
     setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     installEventFilter(this);
@@ -165,13 +165,5 @@ void WGraphicsView::keyPressEvent(QKeyEvent *e)
 void WGraphicsView::keyReleaseEvent(QKeyEvent *e)
 {
     QGraphicsView::keyReleaseEvent(e);
-}
-
-void WGraphicsView::paintEvent(QPaintEvent *e)
-{
-    QGraphicsView::paintEvent(e);
-    QPainter painter(viewport());
-    painter.setPen(QPen(Qt::green, 2, Qt::SolidLine));
-    painter.drawRect(viewport()->rect());
 }
 }

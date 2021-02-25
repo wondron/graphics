@@ -47,6 +47,8 @@ public:
 
 public:
     QString m_name;
+    int m_fps;
+    QString m_showText;
     QWidget *m_panel;
     QList<QString> m_btnsObjName, m_tipName;
     QColor flowBgColor;
@@ -113,7 +115,7 @@ void WGraphicsWidget::updatePos()
     d->m_panel->setGeometry(5, 5, this->width() - ICONSIZE, ICONSIZE * 1.4);
 
     view()->setFixedSize(width(), height());
-    QRect rect = d->view->viewport()->rect();
+    QRect rect = this->rect();
     qDebug()<<"widget"<<rect;
     d->m_aimLabel->setGeometry(rect.center().x() - d->m_aimLabel->width() / 2,
                                rect.center().y() - d->m_aimLabel->height() / 2,
@@ -195,7 +197,8 @@ void WGraphicsWidget::btnClicked()
 
 void WGraphicsWidget::fpsChange(int num)
 {
-    QString str = QString("fps: %1").arg(num);
+    QString str = QString("fps: %2").arg(num);
+    d->m_fps = num;
     d->m_fpsLabel->setFixedSize(str.size() * 10, 25);
     d->m_fpsLabel->setText(str);
 }
