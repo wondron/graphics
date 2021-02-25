@@ -1,9 +1,10 @@
-#ifndef WIMAGEITEM_H
+﻿#ifndef WIMAGEITEM_H
 #define WIMAGEITEM_H
 
 #include <QGraphicsItem>
 #include <QGraphicsRectItem>
 #include <QImage>
+#include <QTimer>
 
 namespace Graphics {
 
@@ -23,11 +24,18 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
+signals:
+    void imgChanged();
+    void imgSizeDif();
+    void imgchgeFps(int);
+
 public slots:
     void setImage(const QImage &image);
 
 private:
     bool event(QEvent *ev) override;
+    QTimer *m_timer;
+    int fpsNum = 0;
     QImage m_image;
     QPointF m_offset;
 };

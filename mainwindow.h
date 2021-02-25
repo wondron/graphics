@@ -1,10 +1,13 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
 #include "wimageitem.h"
 #include "wgraphicswight.h"
 #include "QGraphicsScene"
+#include "QTimer"
+#include "qdir.h"
+#include "QTime"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,5 +29,10 @@ private:
     Graphics::WImageItem *imageItem;
     QGraphicsScene *m_Scene;
     WGraphicsWiget *m_widget;
+    QTimer timer;
+    QTime* time;
+    QDir* dir;
+    QVector<QImage> imgs;
+    int index = 0;
 };
 #endif // MAINWINDOW_H

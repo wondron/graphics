@@ -1,4 +1,4 @@
-#include "wimageitem.h"
+﻿#include "wimageitem.h"
 #include <QPainter>
 #include <QDebug>
 #include <chrono>
@@ -14,8 +14,7 @@ namespace Graphics {
 class CGraphicsImageItemEvent : public QEvent
 {
 public:
-    enum { Type = QEvent::MaxUser - 88};
-
+    enum { Type = QEvent::MaxUser - 66};
     CGraphicsImageItemEvent(const QImage &image)
         : QEvent(QEvent::Type(Type)), m_image(image) {}
 
@@ -32,6 +31,12 @@ private:
 WImageItem::WImageItem(QGraphicsItem *parent)
     : QGraphicsObject(parent)
 {
+    m_timer = new QTimer();
+    m_timer->start(1000);
+    connect(m_timer, &QTimer::timeout, [this]() {
+        emit imgchgeFps(fpsNum);
+        fpsNum = 0;
+    });
 }
 
 WImageItem::~WImageItem()
@@ -54,13 +59,11 @@ bool WImageItem::event(QEvent *ev)
         auto img = static_cast<CGraphicsImageItemEvent *>(ev)->image();
         bool flag = (m_image.size() != img.size()) || m_image.isNull();
         m_image = img;
+        fpsNum ++;
 
         if (flag) {
             scene()->setSceneRect(boundingRect());
-            //            QTimer::singleShot(0,[this](){
-            //                scene()->setSceneRect(boundingRect());
-            //                qDebug()<<boundingRect();
-            //            });
+            emit imgSizeDif();
         }
 
         update();
@@ -78,8 +81,6 @@ QPointF WImageItem::offset() const
 void WImageItem::setOffset(const QPointF &offset)
 {
     if (m_offset == offset)return;
-
-    //不清楚怎么用，
     prepareGeometryChange();
     m_offset = offset;
     update();
@@ -87,7 +88,7 @@ void WImageItem::setOffset(const QPointF &offset)
 
 QRectF WImageItem::boundingRect() const
 {
-    if (m_image.isNull()) return QRectF(-100, -100, 200, 200);
+    if (m_image.isNull()) return QRectF(-200, -200, 400, 400);
     return QRectF(m_offset, m_image.size() / m_image.devicePixelRatioF());
 }
 
@@ -95,15 +96,7 @@ void WImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-
     if (m_image.isNull())return;
-
-    //auto start = std::chrono::steady_clock::now();
-    painter->drawImage(option->exposedRect, m_image, m_image.rect(), Qt::NoFormatConversion);/*
-    auto end = std::chrono::steady_clock::now();
-    qInfo() << "t="
-            << QByteArray::number(std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count(), 'f', 9).data()
-            << 's';*/
+    painter->drawImage(option->exposedRect, m_image, m_image.rect(), Qt::NoFormatConversion);
 }
-
 }
