@@ -88,7 +88,6 @@ WGraphicsScene::WGraphicsScene(QObject *parent) :
     QGraphicsScene(parent), d(new WScenePrivate(this))
 {
     connect(d->centerImage, &WImageItem::imgSizeDif, [this]() {
-        qDebug() << "size dif";
         emit imageSizeChange();
     });
 

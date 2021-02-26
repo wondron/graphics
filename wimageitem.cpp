@@ -57,7 +57,6 @@ bool WImageItem::event(QEvent *ev)
 
         if (flag) {
             scene()->setSceneRect(boundingRect());
-            //qDebug()<<"image size dif";
             emit imgSizeDif();
         }
 

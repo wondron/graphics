@@ -23,7 +23,6 @@ public:
 
 private slots:
     void on_btn_image_clicked();
-
     void on_spinBox_valueChanged(int arg1);
 
 private:
@@ -31,7 +30,6 @@ private:
     Graphics::WGraphicsScene *m_Scene;
     Graphics::WGraphicsWidget *m_widget;
     QTimer timer;
-    QTime* time;
     QDir* dir;
     QVector<QImage> imgs;
     int index = 0;

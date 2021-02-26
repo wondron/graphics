@@ -1,10 +1,6 @@
 <RCC>
     <qresource prefix="/new/icons">
         <file>image/aims.png</file>
-        <file>image/Collapse.png</file>
-        <file>image/Search.png</file>
-        <file>image/Zoom to Actual Size.png</file>
-        <file>image/Zoom to Extents.png</file>
         <file>image/printer.png</file>
         <file>image/OpenGL.png</file>
         <file>image/Antialiasing.png</file>
@@ -13,5 +9,7 @@
         <file>image/Expand.png</file>
         <file>image/centerDirection.png</file>
         <file>image/originalSize.png</file>
+        <file>image/labelShow.png</file>
+        <file>image/aimSwitch.png</file>
     </qresource>
 </RCC>

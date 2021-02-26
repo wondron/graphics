@@ -1,6 +1,7 @@
 ﻿#include "wgraphicswidget.h"
 #include "QTimer"
 #include "wgraphicsscene.h"
+#include "QTime"
 
 #if defined(QT_PRINTSUPPORT_LIB)
 #include <QtPrintSupport/qtprintsupportglobal.h>
@@ -25,13 +26,14 @@ class WViewPrivate
 public:
     WViewPrivate(WGraphicsWidget *qq): q(qq)
     {
-        timer = new QTimer();
         scene = nullptr;
-        m_btnsObjName << u8"fitBtn" << u8"zoomIn" << "zoomOut" << u8"centerOn"
-                      << u8"origin" << "printer"  << "OpenGL"  << "Antialiasing";
+        m_btnsObjName << "fitBtn" << "zoomIn" << "zoomOut" << "centerOn"
+                      << "origin" << "printer"  << "OpenGL"  << "Antialiasing"
+                      << "labelShow" << "aimSwitch";
 
         m_tipName   << u8"适应" << u8"放大" << u8"缩小" << u8"定位中心"
-                    << u8"原始尺寸" << u8"打印" << u8"OpenGL开关" << u8"反锯齿开关";
+                    << u8"原始尺寸" << u8"打印" << u8"OpenGL开关" << u8"反锯齿开关"
+                    << u8"辅助信息显示" << u8"瞄准线开关";
 
         flowBgColor = QColor(150, 150, 150);
         flowPressColor = QColor( 255, 0, 0);
@@ -39,7 +41,6 @@ public:
     ~WViewPrivate()
     {
         delete view;
-        delete timer;
     }
     WGraphicsWidget *q;
     WGraphicsView *view;
@@ -54,18 +55,21 @@ public:
     QColor flowBgColor;
     QColor flowPressColor;
 
+    bool m_labelState = true;
     QLabel *m_scaleLabel;
     QLabel *m_aimLabel;
     QLabel *m_nameLabel;
     QLabel *m_fpsLabel;
-    QTimer *timer;
 };
 
 WGraphicsWidget::WGraphicsWidget(const QString &name, QWidget *parent)
     : QFrame(parent), d(new WViewPrivate(this))
 {
+    setObjectName("graphicsWisget");
     setFrameStyle(Sunken | StyledPanel);
     d->view = new WGraphicsView(this);
+    d->view->setObjectName("WgraphicsView");
+    d->view->installEventFilter(this);
     int size = style()->pixelMetric(QStyle::PM_ToolBarIconSize);
     d->m_name = name;
     QSize iconSize(size, size);
@@ -75,6 +79,7 @@ WGraphicsWidget::WGraphicsWidget(const QString &name, QWidget *parent)
     initScaleWidget();
     //initNameLabel();
     initFpsLabel();
+    //installEventFilter(this);
     connect(d->view, &WGraphicsView::scaleChanged, [this](qreal scale) {
         QString str = QString::number(scale * 100, 'f', 1);
         d->m_scaleLabel->setText(str + "%");
@@ -112,11 +117,10 @@ void WGraphicsWidget::setScene(WGraphicsScene *scene)
 void WGraphicsWidget::updatePos()
 {
     if (!view()) return;
-    d->m_panel->setGeometry(5, 5, this->width() - ICONSIZE, ICONSIZE * 1.4);
+    d->m_panel->setGeometry(5, 5, this->width() - ICONSIZE / 2, ICONSIZE * 1.4);
 
     view()->setFixedSize(width(), height());
     QRect rect = this->rect();
-    qDebug()<<"widget"<<rect;
     d->m_aimLabel->setGeometry(rect.center().x() - d->m_aimLabel->width() / 2,
                                rect.center().y() - d->m_aimLabel->height() / 2,
                                d->m_aimLabel->width(),
@@ -126,15 +130,26 @@ void WGraphicsWidget::updatePos()
                                  rect.height() - d->m_scaleLabel->height(),
                                  d->m_scaleLabel->width(), d->m_scaleLabel->height());
 
-    //d->m_nameLabel->setGeometry(5, 5, d->m_nameLabel->width(), d->m_nameLabel->height());
     d->m_fpsLabel->setGeometry(5, 5, d->m_fpsLabel->width(), d->m_fpsLabel->height());
+}
+
+void WGraphicsWidget::setLabelShow(bool ennabel)
+{
+    d->m_labelState = ennabel;
+    d->m_scaleLabel->setVisible(ennabel);
+    d->m_fpsLabel->setVisible(ennabel);
+    d->m_aimLabel->setVisible(ennabel);
+}
+
+void WGraphicsWidget::setAimShow(bool ennabel)
+{
+    if (!d->scene) return;
+    d->scene->setCenterImageAimVisible(ennabel);
 }
 
 void WGraphicsWidget::setWidgetName(QString name)
 {
     d->m_name = name;
-    //d->m_nameLabel->setFixedSize(200, 25);
-    //d->m_nameLabel->setText(name);
 }
 
 void WGraphicsWidget::enterEvent(QEvent *e)
@@ -192,7 +207,21 @@ void WGraphicsWidget::btnClicked()
     case ANTIALIASE:
         d->view->setAntialiase(btn->isChecked());
         break;
+    case LABELSHOW:
+        setLabelShow(btn->isChecked());
+    case AIMSWITCH:
+
+        break;
     }
+}
+
+bool WGraphicsWidget::eventFilter(QObject *target, QEvent *event)
+{
+    qDebug()<<QTime::currentTime().second()<<target->objectName()<<event->type();
+    if(target->objectName() == "aimLabel"){
+        //return true;
+    }
+    return QWidget::eventFilter(target, event);
 }
 
 void WGraphicsWidget::fpsChange(int num)
@@ -220,15 +249,13 @@ void WGraphicsWidget::iniPanel()
     QList<QString> imgName;
     imgName << "Expand" << "ZoomIn" << "ZoomOut"
             << "centerDirection" << "originalSize"
-            << "printer" << "OpenGL" << "Antialiasing";
+            << "printer" << "OpenGL" << "Antialiasing"
+            << "labelShow" << "aimSwitch";
 
     //循环添加顶部按钮
     for (int i = 0; i < d->m_btnsObjName.count(); i++) {
         QPushButton *btn = new QPushButton;
         btn->setIconSize(QSize(ICONSIZE, ICONSIZE));
-
-        //绑定按钮单击事件,用来发出信号通知
-        connect(btn, SIGNAL(clicked(bool)), this, SLOT(btnClicked()));
 
         QString str = QString(":/new/icons/image/%1.png").arg(imgName[i]);
         btn->setIcon(QIcon(QPixmap(str)));
@@ -237,8 +264,13 @@ void WGraphicsWidget::iniPanel()
         //设置标识,用来区别按钮
         btn->setObjectName(d->m_btnsObjName.at(i));
 
-        if (imgName[i] == "OpenGL" || imgName[i] == "Antialiasing" )
+        if (imgName[i] == "OpenGL" || imgName[i] == "Antialiasing")
             btn->setCheckable(true);
+
+        if (imgName[i] == "labelShow" || imgName[i] == "aimSwitch") {
+            btn->setCheckable(true);
+            btn->setChecked(true);
+        }
 
         //设置固定宽度
         btn->setFixedWidth(ICONSIZE + 8);
@@ -252,6 +284,9 @@ void WGraphicsWidget::iniPanel()
 
         //将按钮加到布局中
         layout->addWidget(btn);
+
+        //绑定按钮单击事件,用来发出信号通知
+        connect(btn, SIGNAL(clicked(bool)), this, SLOT(btnClicked()));
     }
     initPanelStyle();
 }
@@ -272,6 +307,7 @@ void WGraphicsWidget::initPanelStyle()
 void WGraphicsWidget::initScaleWidget()
 {
     d->m_scaleLabel = new QLabel("100%", this);
+    d->m_scaleLabel->setObjectName("scaleLabel");
     QFont font("Arial");
     font.setBold(true);
     font.setPixelSize(12);
@@ -284,6 +320,10 @@ void WGraphicsWidget::initScaleWidget()
 void WGraphicsWidget::initAimWidget()
 {
     d->m_aimLabel = new QLabel(this);
+    d->m_aimLabel->setObjectName("aimLabel");
+    d->m_aimLabel->installEventFilter(this);
+    d->m_aimLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    //d->m_aimLabel->installEventFilter(this);
     QImage img(":/new/icons/image/aims.png");
     d->m_aimLabel->setFixedSize(img.width(), img.height());
     d->m_aimLabel->setPixmap(QPixmap::fromImage(img));
@@ -305,6 +345,7 @@ void WGraphicsWidget::initNameLabel()
 void WGraphicsWidget::initFpsLabel()
 {
     d->m_fpsLabel = new QLabel(this);
+    d->m_fpsLabel->setObjectName("fpsLabel");
     QFont font("Arial");
     font.setBold(true);
     font.setPixelSize(13);

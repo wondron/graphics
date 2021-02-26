@@ -13,6 +13,7 @@ qtHaveModule(opengl): QT += opengl
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    wcircleitem.cpp \
     wgraphicsscene.cpp \
     wgraphicsview.cpp \
     wgraphicswidget.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
+    wcircleitem.h \
     wgraphicsscene.h \
     wgraphicsview.h \
     wgraphicswidget.h \

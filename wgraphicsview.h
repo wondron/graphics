@@ -10,7 +10,6 @@ class WGraphicsView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    enum{FITBTN, ZOOMIN, ZOOMOUT, CENTERON, ORIGIN, PRINTER, OPENGL, ANTIALIASE};
     WGraphicsView(QWidget *parent = nullptr);
 
 public slots:

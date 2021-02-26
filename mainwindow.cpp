@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "qdebug.h"
 #include "QFileDialog"
+#include "wcircleitem.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,14 +13,15 @@ MainWindow::MainWindow(QWidget *parent)
     m_widget = new Graphics::WGraphicsWidget(u8"test");
     m_widget->setScene(m_Scene);
     ui->ver_layout->addWidget(m_widget);
-    m_widget->updatePos();
-    time = new QTime();
 
     connect(&timer, &QTimer::timeout, [this]() {
         if (index >= imgs.size()) index = 0;
         m_widget->setWidgetName(dir->entryList()[index]);
         m_Scene->setCenterImage(imgs[index++]);
     });
+
+    //Graphics::WCircleItem* item = new Graphics::WCircleItem(QPointF(20,20), 20);
+    //m_Scene->addItem(item);
 }
 
 MainWindow::~MainWindow()

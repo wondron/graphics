@@ -34,7 +34,6 @@ WGraphicsView::WGraphicsView(QWidget *parent) : QGraphicsView(parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    installEventFilter(this);
 
     QPixmap pixmap(40, 40);
     QPainter painter(&pixmap);
@@ -59,6 +58,7 @@ void WGraphicsView::wheelEvent(QWheelEvent *e)
 
 void WGraphicsView::zoomIn(qreal level)
 {
+    qDebug()<<"enter ZoomIn";
     qreal scale = transform().m11();
     scale *= level;
     if (scale < 0.001) return;
