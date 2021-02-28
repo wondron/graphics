@@ -11,5 +11,9 @@
         <file>image/originalSize.png</file>
         <file>image/labelShow.png</file>
         <file>image/aimSwitch.png</file>
+        <file>image/camera.png</file>
+        <file>image/continue.png</file>
+        <file>image/saveImg.png</file>
+        <file>image/pamSet.png</file>
     </qresource>
 </RCC>

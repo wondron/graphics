@@ -58,7 +58,6 @@ void WGraphicsView::wheelEvent(QWheelEvent *e)
 
 void WGraphicsView::zoomIn(qreal level)
 {
-    qDebug()<<"enter ZoomIn";
     qreal scale = transform().m11();
     scale *= level;
     if (scale < 0.001) return;
@@ -82,6 +81,10 @@ void WGraphicsView::zoomOut(qreal level)
 void WGraphicsView::zoom(qreal scale)
 {
     if (scale < 0.001) return;
+
+    qreal s = transform().m11();
+    if(s == scale) return;
+
     QTransform matrix;
     matrix.scale(scale, scale);
     setTransform(matrix);
@@ -136,6 +139,7 @@ void WGraphicsView::setAntialiase(bool enabel)
 void WGraphicsView::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::MiddleButton) {
+        dragFlag = true;
         setDragMode(QGraphicsView::ScrollHandDrag);
         //发生中键的按时，返回的还是左键。 第一个left是触发鼠标事件的按键，第二个是触发事件时，鼠标的状态
         QMouseEvent evt(e->type(), e->localPos(), e->windowPos(), e->screenPos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, e->source());
@@ -147,6 +151,7 @@ void WGraphicsView::mousePressEvent(QMouseEvent *e)
 void WGraphicsView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::MiddleButton) {
+        dragFlag = false;
         setDragMode(QGraphicsView::NoDrag);
     }
     QGraphicsView::mouseReleaseEvent(e);
@@ -154,6 +159,9 @@ void WGraphicsView::mouseReleaseEvent(QMouseEvent *e)
 
 void WGraphicsView::mouseMoveEvent(QMouseEvent *e)
 {
+    if (dragFlag) {
+        emit dragChanged();
+    }
     QGraphicsView::mouseMoveEvent(e);
 }
 

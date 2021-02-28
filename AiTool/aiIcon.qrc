@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/aiImageIcon">
+        <file>aiImgIcon/open.png</file>
+        <file>aiImgIcon/save.png</file>
+    </qresource>
+</RCC>

@@ -42,11 +42,12 @@ public:
     {
         delete view;
     }
+
+public:
     WGraphicsWidget *q;
     WGraphicsView *view;
     WGraphicsScene *scene;
 
-public:
     QString m_name;
     int m_fps;
     QString m_showText;
@@ -56,6 +57,8 @@ public:
     QColor flowPressColor;
 
     bool m_labelState = true;
+    bool m_firstSetScene = true; //第一次设置scene
+    bool m_panelVisibel = true;
     QLabel *m_scaleLabel;
     QLabel *m_aimLabel;
     QLabel *m_nameLabel;
@@ -67,9 +70,10 @@ WGraphicsWidget::WGraphicsWidget(const QString &name, QWidget *parent)
 {
     setObjectName("graphicsWisget");
     setFrameStyle(Sunken | StyledPanel);
+    d->scene = new WGraphicsScene();
     d->view = new WGraphicsView(this);
     d->view->setObjectName("WgraphicsView");
-    d->view->installEventFilter(this);
+    setCurrentScene(d->scene);
     int size = style()->pixelMetric(QStyle::PM_ToolBarIconSize);
     d->m_name = name;
     QSize iconSize(size, size);
@@ -77,9 +81,8 @@ WGraphicsWidget::WGraphicsWidget(const QString &name, QWidget *parent)
     iniPanel();
     initAimWidget();
     initScaleWidget();
-    //initNameLabel();
     initFpsLabel();
-    //installEventFilter(this);
+
     connect(d->view, &WGraphicsView::scaleChanged, [this](qreal scale) {
         QString str = QString::number(scale * 100, 'f', 1);
         d->m_scaleLabel->setText(str + "%");
@@ -102,16 +105,18 @@ QString WGraphicsWidget::widgetName() const
     return d->m_name;
 }
 
-void WGraphicsWidget::setScene(WGraphicsScene *scene)
+void WGraphicsWidget::setCurrentScene(WGraphicsScene *scene)
 {
-    if (scene) {
+    if (!d->m_firstSetScene) {
         disconnect(d->scene, &WGraphicsScene::imageSizeChange, d->view, &WGraphicsView::fitScene);
         disconnect(d->scene, &WGraphicsScene::fpsChanged, this, &WGraphicsWidget::fpsChange);
     }
+
+    d->m_firstSetScene = false;
     d->view->setScene(scene);
+    d->scene = scene;
     connect(scene, &WGraphicsScene::imageSizeChange, d->view, &WGraphicsView::fitScene);
     connect(scene, &WGraphicsScene::fpsChanged, this, &WGraphicsWidget::fpsChange);
-    d->scene = scene;
 }
 
 void WGraphicsWidget::updatePos()
@@ -147,6 +152,12 @@ void WGraphicsWidget::setAimShow(bool ennabel)
     d->scene->setCenterImageAimVisible(ennabel);
 }
 
+void WGraphicsWidget::setPanelShow(const bool enabel)
+{
+    d->m_panelVisibel = enabel;
+    d->m_panel->setVisible(enabel);
+}
+
 void WGraphicsWidget::setWidgetName(QString name)
 {
     d->m_name = name;
@@ -155,12 +166,14 @@ void WGraphicsWidget::setWidgetName(QString name)
 void WGraphicsWidget::enterEvent(QEvent *e)
 {
     Q_UNUSED(e);
+    if(!d->m_panelVisibel) return;
     d->m_panel->setVisible(true);
 }
 
 void WGraphicsWidget::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e);
+    if(!d->m_panelVisibel) return;
     d->m_panel->setVisible(false);
 }
 
@@ -209,19 +222,11 @@ void WGraphicsWidget::btnClicked()
         break;
     case LABELSHOW:
         setLabelShow(btn->isChecked());
+        break;
     case AIMSWITCH:
-
+        setAimShow(btn->isChecked());
         break;
     }
-}
-
-bool WGraphicsWidget::eventFilter(QObject *target, QEvent *event)
-{
-    qDebug()<<QTime::currentTime().second()<<target->objectName()<<event->type();
-    if(target->objectName() == "aimLabel"){
-        //return true;
-    }
-    return QWidget::eventFilter(target, event);
 }
 
 void WGraphicsWidget::fpsChange(int num)
@@ -314,6 +319,7 @@ void WGraphicsWidget::initScaleWidget()
     d->m_scaleLabel->setFixedSize(50, 25);
     d->m_scaleLabel->setFont(font);
     d->m_scaleLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    d->m_scaleLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     d->m_scaleLabel->setStyleSheet("QLabel{background-color:rgb(100,100,100);color:rgb(0,200,0);border: 2px solid rgb(100,200,100); border-radius: 5px;}");
 }
 
@@ -323,7 +329,6 @@ void WGraphicsWidget::initAimWidget()
     d->m_aimLabel->setObjectName("aimLabel");
     d->m_aimLabel->installEventFilter(this);
     d->m_aimLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-    //d->m_aimLabel->installEventFilter(this);
     QImage img(":/new/icons/image/aims.png");
     d->m_aimLabel->setFixedSize(img.width(), img.height());
     d->m_aimLabel->setPixmap(QPixmap::fromImage(img));
@@ -352,6 +357,7 @@ void WGraphicsWidget::initFpsLabel()
     d->m_fpsLabel->setFixedSize(d->m_name.size() * 10, 25);
     d->m_fpsLabel->setFont(font);
     d->m_fpsLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    d->m_fpsLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     d->m_fpsLabel->setStyleSheet("color:rgb(0,200,0);");
 }
 }

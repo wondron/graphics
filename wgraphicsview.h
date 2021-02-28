@@ -34,12 +34,14 @@ private:
 
 signals:
     void scaleChanged(qreal);
+    void dragChanged();
 
 public slots:
 
 
 private:
     QTimer *m_timer;
+    bool dragFlag = false;
 };
 
 }

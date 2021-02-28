@@ -3,25 +3,17 @@
 #include "qdebug.h"
 #include "QFileDialog"
 #include "wcircleitem.h"
+#include "camTool/wcamerwidget.h"
+#include "AiTool/aiwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    m_Scene = new Graphics::WGraphicsScene();
-    m_widget = new Graphics::WGraphicsWidget(u8"test");
-    m_widget->setScene(m_Scene);
-    ui->ver_layout->addWidget(m_widget);
-
-    connect(&timer, &QTimer::timeout, [this]() {
-        if (index >= imgs.size()) index = 0;
-        m_widget->setWidgetName(dir->entryList()[index]);
-        m_Scene->setCenterImage(imgs[index++]);
-    });
-
-    //Graphics::WCircleItem* item = new Graphics::WCircleItem(QPointF(20,20), 20);
-    //m_Scene->addItem(item);
+    AiWidget *widget = new AiWidget();
+    widget->setWindowFlag(Qt::Dialog);
+    widget->show();
 }
 
 MainWindow::~MainWindow()
