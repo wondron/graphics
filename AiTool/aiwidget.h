@@ -1,4 +1,4 @@
-#ifndef AIWIDGET_H
+﻿#ifndef AIWIDGET_H
 #define AIWIDGET_H
 
 #include <QMainWindow>
@@ -7,6 +7,7 @@ namespace Ui {
 class AiWidget;
 }
 
+class AiWidetPrivate;
 class AiWidget : public QMainWindow
 {
     Q_OBJECT
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::AiWidget *ui;
+    AiWidetPrivate *d;
 };
 
 #endif // AIWIDGET_H

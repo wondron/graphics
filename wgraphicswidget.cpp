@@ -77,7 +77,7 @@ WGraphicsWidget::WGraphicsWidget(const QString &name, QWidget *parent)
     int size = style()->pixelMetric(QStyle::PM_ToolBarIconSize);
     d->m_name = name;
     QSize iconSize(size, size);
-    setMinimumSize(400, 300);
+    //setMinimumSize(400, 300);
     iniPanel();
     initAimWidget();
     initScaleWidget();
