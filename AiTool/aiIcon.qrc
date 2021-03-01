@@ -2,5 +2,11 @@
     <qresource prefix="/aiImageIcon">
         <file>aiImgIcon/open.png</file>
         <file>aiImgIcon/save.png</file>
+        <file>aiImgIcon/back.png</file>
+        <file>aiImgIcon/delete.png</file>
+        <file>aiImgIcon/next.png</file>
+        <file>aiImgIcon/pen.png</file>
+        <file>aiImgIcon/polygon.png</file>
+        <file>aiImgIcon/saveOne.png</file>
     </qresource>
 </RCC>

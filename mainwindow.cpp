@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     AiWidget *widget = new AiWidget();
+    //Graphics::WGraphicsWidget* widget = new Graphics::WGraphicsWidget();
     widget->setWindowFlag(Qt::Dialog);
     widget->show();
 }
