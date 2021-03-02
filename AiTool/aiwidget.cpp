@@ -2,20 +2,34 @@
 #include "ui_aiwidget.h"
 #include "wgraphicswidget.h"
 #include "QDebug"
+#include "qfiledialog.h"
+#include "QMessageBox"
+#include "QtConcurrent"
+
+#define CHECKERR(ifstr, errStr)\
+if (ifstr){\
+emit d->objSignal->sendErr(errStr);\
+return;\
+}
+
+using namespace Graphics;
 
 class AiWidetPrivate
 {
 public:
     AiWidetPrivate(AiWidget *pp): p(pp) {}
-
     ~AiWidetPrivate()
     {
         delete srcWidget;
         delete labelWidget;
+        delete objSignal;
+        delete fileLabel;
     }
     AiWidget *p;
-    Graphics::WGraphicsWidget *srcWidget;
-    Graphics::WGraphicsWidget *labelWidget;
+    QLabel *fileLabel = new QLabel();
+    CSignalObj *objSignal = new CSignalObj();
+    WGraphicsWidget *srcWidget = new WGraphicsWidget();
+    WGraphicsWidget *labelWidget = new WGraphicsWidget();
 };
 
 
@@ -24,13 +38,13 @@ AiWidget::AiWidget(QWidget *parent) :
     ui(new Ui::AiWidget), d(new AiWidetPrivate(this))
 {
     ui->setupUi(this);
-
-    d->srcWidget = new Graphics::WGraphicsWidget();
-    d->labelWidget = new Graphics::WGraphicsWidget();
-    ui->hlay_src->addWidget(d->srcWidget);
-    ui->hlay_label->addWidget(d->labelWidget);
-
+    iniLayout();
     iniIcon();
+
+    //信号对象的连接
+    connect(d->objSignal, &CSignalObj::sendErr, [this](QString a) {
+        QMessageBox::question(this, u8"提示", a, QMessageBox::Ok);
+    });
 
     connect(d->srcWidget->view(), &Graphics::WGraphicsView::dragChanged, [ = ]() {
         QPointF center = d->srcWidget->view()->mapToScene(d->srcWidget->view()->rect().center().x(), d->srcWidget->view()->rect().center().y());
@@ -44,6 +58,8 @@ AiWidget::AiWidget(QWidget *parent) :
 
     connect(d->labelWidget->view(), &Graphics::WGraphicsView::scaleChanged, d->srcWidget->view(), &Graphics::WGraphicsView::zoom);
     connect(d->srcWidget->view(), &Graphics::WGraphicsView::scaleChanged, d->labelWidget->view(), &Graphics::WGraphicsView::zoom);
+
+    connect(ui->btn_open, &QPushButton::clicked, this, &AiWidget::readImageTool);
 }
 
 AiWidget::~AiWidget()
@@ -74,4 +90,24 @@ void AiWidget::iniIcon()
         btnList[i]->setIcon(QIcon(QPixmap(str)));
         btnList[i]->setIconSize(QSize(ICONSIZE, ICONSIZE));
     }
+}
+
+void AiWidget::iniLayout()
+{
+    ui->hlay_src->addWidget(d->srcWidget);
+    ui->hlay_label->addWidget(d->labelWidget);
+    ui->statusbar->addWidget(d->labelWidget);
+}
+
+void AiWidget::readImageTool()
+{
+    QString directory = QFileDialog::getExistingDirectory(this, u8"选择图片文件夹");
+    CHECKERR(directory == "", u8"所选文件夹为空");
+
+    QFileInfoList list;
+    d->fileLabel->setText(u8"当前操作文件夹：" + directory);
+
+    int listsize = ui->listWidget->size().width() - 40;
+
+
 }

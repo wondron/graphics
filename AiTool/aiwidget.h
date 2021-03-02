@@ -7,6 +7,20 @@ namespace Ui {
 class AiWidget;
 }
 
+/**
+ * @brief The CSignalObj class: 信号类
+ */
+class CSignalObj : public QObject
+{
+    Q_OBJECT
+public:
+    CSignalObj() {}
+
+signals:
+    void sendErr(QString);
+    void axisChange(int);
+};
+
 class AiWidetPrivate;
 class AiWidget : public QMainWindow
 {
@@ -19,6 +33,10 @@ public:
 
 private:
     void iniIcon();
+    void iniLayout();
+
+private slots:
+    void readImageTool();
 
 private:
     Ui::AiWidget *ui;
