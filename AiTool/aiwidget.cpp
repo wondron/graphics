@@ -109,5 +109,7 @@ void AiWidget::readImageTool()
 
     int listsize = ui->listWidget->size().width() - 40;
 
+    QtConcurrent::run( [=](){
 
+    } );
 }
