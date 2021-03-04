@@ -1,4 +1,6 @@
 QT       += core gui
+QT += charts
+QT += concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,25 +12,25 @@ qtHaveModule(opengl): QT += opengl
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-include(AiTool/AiTool.pri)
+include(aitool/aitool.pri)
 include(camTool/camTool.pri)
+include(items/items.pri)
 
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    wcircleitem.cpp \
     wgraphicsscene.cpp \
     wgraphicsview.cpp \
     wgraphicswidget.cpp \
-    wimageitem.cpp
+    cexecute.cpp
 
 HEADERS += \
     mainwindow.h \
-    wcircleitem.h \
     wgraphicsscene.h \
     wgraphicsview.h \
     wgraphicswidget.h \
-    wimageitem.h
+    cexecute.h\
+    cfunction.h
 
 FORMS += \
     mainwindow.ui

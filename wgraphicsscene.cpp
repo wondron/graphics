@@ -10,7 +10,7 @@
 #include <QTimer>
 
 #include "wgraphicsscene.h"
-#include "wimageitem.h"
+#include "items/wimageitem.h"
 
 namespace Graphics {
 class WAimLineItem : public QGraphicsItem
@@ -101,6 +101,11 @@ WGraphicsScene::~WGraphicsScene()
 WImageItem *WGraphicsScene::centerImageItem() const
 {
     return d->centerImage;
+}
+
+QImage WGraphicsScene::getImage() const
+{
+    return d->centerImage->image();
 }
 
 void WGraphicsScene::setCenterImageAimVisible(bool visible)

@@ -32,7 +32,7 @@ WGraphicsView::WGraphicsView(QWidget *parent) : QGraphicsView(parent)
     setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    //setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QPixmap pixmap(40, 40);

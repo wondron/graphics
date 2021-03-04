@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "wimageitem.h"
 #include "wgraphicswidget.h"
 #include "wgraphicsscene.h"
 #include "QTimer"

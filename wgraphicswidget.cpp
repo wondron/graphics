@@ -119,6 +119,11 @@ void WGraphicsWidget::setCurrentScene(WGraphicsScene *scene)
     connect(scene, &WGraphicsScene::fpsChanged, this, &WGraphicsWidget::fpsChange);
 }
 
+WGraphicsScene *WGraphicsWidget::currentScene() const
+{
+    return d->scene;
+}
+
 void WGraphicsWidget::updatePos()
 {
     if (!view()) return;
@@ -156,6 +161,16 @@ void WGraphicsWidget::setPanelShow(const bool enabel)
 {
     d->m_panelVisibel = enabel;
     d->m_panel->setVisible(enabel);
+}
+
+void WGraphicsWidget::setImage(const QImage &img)
+{
+    d->scene->setCenterImage(img);
+}
+
+QImage WGraphicsWidget::getImage() const
+{
+    return d->scene->getImage();
 }
 
 void WGraphicsWidget::setWidgetName(QString name)

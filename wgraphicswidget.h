@@ -22,24 +22,55 @@ class WGraphicsWidget : public QFrame
 public:
     enum{FITBTN, ZOOMIN, ZOOMOUT, CENTERON, ORIGIN, PRINTER, OPENGL, ANTIALIASE, LABELSHOW, AIMSWITCH};
     explicit WGraphicsWidget(const QString &name = "", QWidget *parent = nullptr);
+
+    /**
+     * @brief 获取view窗口
+     */
     WGraphicsView *view() const;
+
+    /**
+     * @brief 获取窗口名称
+     */
     QString widgetName() const;
+
+    /**
+     * @brief 切换当前的scene
+     */
     void setCurrentScene(WGraphicsScene* scene);
+
+    /**
+     * @brief 返回当前scene指针
+     */
+    WGraphicsScene* currentScene() const;
+    /**
+     * @brief 更新标注，工具栏，Aim的位置
+     */
     void updatePos();
 
     /**
-     * @brief setLabelShow: 是否显示标注信息。
+     * @brief 显示标注信息。
      */
     void setLabelShow(const bool enabel);
+
     /**
-     * @brief setAimShow: 显示瞄准信息
+     * @brief 显示瞄准信息
      */
     void setAimShow(const bool enabel);
 
     /**
-     * @brief setPanelShow: 工具栏显示
+     * @brief 工具栏显示
      */
     void setPanelShow(const bool enabel);
+
+    /**
+     * @brief 设置显示图像
+     */
+    void setImage(const QImage &);
+
+    /**
+     * @brief 获取当前显示图像
+     */
+    QImage getImage() const;
 
 signals:
     void sendEvent(QEvent* e);
@@ -59,7 +90,6 @@ private:
     void initPanelStyle();
     void initScaleWidget();
     void initAimWidget();
-    //void initNameLabel();
     void initFpsLabel();
 
 private:

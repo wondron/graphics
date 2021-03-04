@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include "qdebug.h"
 #include "QFileDialog"
-#include "wcircleitem.h"
 #include "camTool/wcamerwidget.h"
 #include "AiTool/aiwidget.h"
 
@@ -11,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    AiWidget *widget = new AiWidget();
+    AiWidget *widget = new AiWidget(this);
     //Graphics::WGraphicsWidget* widget = new Graphics::WGraphicsWidget();
     widget->setWindowFlag(Qt::Dialog);
     widget->show();
