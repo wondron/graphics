@@ -84,16 +84,13 @@ private:
      * @brief 初始化图标
      */
     void iniIcon();
-    void iniLayout();
-
-private slots:
-    void readImageTool();
 
     /**
      * @brief 初始化布局
      */
     void iniLayout();
 
+private slots:
     /**
      * @brief 私有类数据和标注界面的初始化
      */
