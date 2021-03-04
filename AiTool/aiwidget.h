@@ -90,12 +90,12 @@ private:
      */
     void iniLayout();
 
-private slots:
     /**
      * @brief 私有类数据和标注界面的初始化
      */
     void initialData();
 
+private slots:
     /**
      * @brief 初始化进度栏对话框
      */

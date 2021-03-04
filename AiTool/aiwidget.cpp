@@ -362,16 +362,17 @@ void AiWidget::iniIcon()
 
     QStringList list;
     list << "open" << "save" << "saveOne"
-         << "pen" << "polygon" << "delete";
+         << "pen" << "polygon" << "delete" << "eraser";
 
     QList<QPushButton *> btnList;
     btnList << ui->btn_open << ui->btn_save << ui->btn_saveOne
-            << ui->btn_pen << ui->btn_polygon << ui->btn_delete;
+            << ui->btn_pen << ui->btn_polygon << ui->btn_delete << ui->btn_eraser;
 
     for (int i = 0 ; i < list.size() ; i ++) {
         str = QString(":/aiImageIcon/aiImgIcon/%1.png").arg(list[i]);
         btnList[i]->setIcon(QIcon(QPixmap(str)));
         btnList[i]->setIconSize(QSize(ICONSIZE, ICONSIZE));
+        btnList[i]->setFixedSize(QSize(ICONSIZE + 4, ICONSIZE + 4));
     }
 
     SETICONBTN(ui->btn_open, u8"打开文件夹(f)", readImageTool, "f");
@@ -379,7 +380,7 @@ void AiWidget::iniIcon()
     SETICONBTN(ui->btn_saveOne,  u8"全部保存(ctrl+shift+s)", saveTool, "ctrl+shift+s");
     SETICONBTN(ui->btn_pen,  u8"画笔工具(b)", usePenTool, "b");
     SETICONBTN(ui->btn_polygon,  u8"多边形工具(n)", usePolyTool, "n");
-    //SETICONBTN(,  u8"橡皮擦(e)", useEraserTool, "e");
+    SETICONBTN(ui->btn_eraser,  u8"橡皮擦(e)", useEraserTool, "e");
     //SETICONBTN(biggerPen,  u8"增加画笔宽度(a)", useBiggerPenTool, "a");
     //SETICONBTN(smallerPen,  u8"减小画笔宽度(s)", useSmallerPenTool, "s");
     SETICONBTN(ui->btn_delete, u8"删除(d)", deletePenTool, "d");

@@ -33,7 +33,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
-       <number>3</number>
+       <number>5</number>
       </property>
       <property name="topMargin">
        <number>0</number>
@@ -135,7 +135,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_8">
+       <widget class="QPushButton" name="btn_eraser">
         <property name="minimumSize">
          <size>
           <width>30</width>

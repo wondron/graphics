@@ -8,5 +8,6 @@
         <file>aiImgIcon/pen.png</file>
         <file>aiImgIcon/polygon.png</file>
         <file>aiImgIcon/saveOne.png</file>
+        <file>aiImgIcon/eraser.png</file>
     </qresource>
 </RCC>
