@@ -34,6 +34,7 @@ WGraphicsView::WGraphicsView(QWidget *parent) : QGraphicsView(parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //installEventFilter(this);
 
     QPixmap pixmap(40, 40);
     QPainter painter(&pixmap);
@@ -173,5 +174,10 @@ void WGraphicsView::keyPressEvent(QKeyEvent *e)
 void WGraphicsView::keyReleaseEvent(QKeyEvent *e)
 {
     QGraphicsView::keyReleaseEvent(e);
+}
+
+bool WGraphicsView::event(QEvent *e)
+{
+    return QGraphicsView::event(e);
 }
 }

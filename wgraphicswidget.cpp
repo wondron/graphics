@@ -27,8 +27,8 @@ public:
     WViewPrivate(WGraphicsWidget *qq): q(qq)
     {
         scene = nullptr;
-        m_btnsObjName << "fitBtn" << "zoomIn" << "zoomOut" << "centerOn"
-                      << "origin" << "printer"  << "OpenGL"  << "Antialiasing"
+        m_btnsObjName << "expand" << "zoomIn" << "zoomOut" << "centerOn"
+                      << "originalSize" << "printer"  << "openGL"  << "antialiasing"
                       << "labelShow" << "aimSwitch";
 
         m_tipName   << u8"适应" << u8"放大" << u8"缩小" << u8"定位中心"
@@ -48,11 +48,13 @@ public:
     WGraphicsView *view;
     WGraphicsScene *scene;
 
+    QList<QString> m_btnsObjName, m_tipName;
+    QList<QPushButton *>m_btnList;
+
     QString m_name;
     int m_fps;
     QString m_showText;
     QWidget *m_panel;
-    QList<QString> m_btnsObjName, m_tipName;
     QColor flowBgColor;
     QColor flowPressColor;
 
@@ -149,12 +151,14 @@ void WGraphicsWidget::setLabelShow(bool ennabel)
     d->m_scaleLabel->setVisible(ennabel);
     d->m_fpsLabel->setVisible(ennabel);
     d->m_aimLabel->setVisible(ennabel);
+    d->m_btnList[LABELSHOW]->setChecked(ennabel);
 }
 
 void WGraphicsWidget::setAimShow(bool ennabel)
 {
     if (!d->scene) return;
     d->scene->setCenterImageAimVisible(ennabel);
+    d->m_btnList[AIMSWITCH]->setChecked(ennabel);
 }
 
 void WGraphicsWidget::setPanelShow(const bool enabel)
@@ -265,29 +269,22 @@ void WGraphicsWidget::iniPanel()
     d->m_panel->setLayout(layout);
     d->m_panel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-    //按钮集合名称,如果需要新增按钮则在这里增加即可
-    QList<QString> imgName;
-    imgName << "Expand" << "ZoomIn" << "ZoomOut"
-            << "centerDirection" << "originalSize"
-            << "printer" << "OpenGL" << "Antialiasing"
-            << "labelShow" << "aimSwitch";
-
     //循环添加顶部按钮
     for (int i = 0; i < d->m_btnsObjName.count(); i++) {
         QPushButton *btn = new QPushButton;
         btn->setIconSize(QSize(ICONSIZE, ICONSIZE));
 
-        QString str = QString(":/new/icons/image/%1.png").arg(imgName[i]);
+        QString str = QString(":/icon/image/%1.png").arg(d->m_btnsObjName[i]);
         btn->setIcon(QIcon(QPixmap(str)));
         btn->setToolTip(d->m_tipName[i]);
 
         //设置标识,用来区别按钮
         btn->setObjectName(d->m_btnsObjName.at(i));
 
-        if (imgName[i] == "OpenGL" || imgName[i] == "Antialiasing")
+        if (d->m_btnsObjName[i] == "OpenGL" || d->m_btnsObjName[i] == "Antialiasing")
             btn->setCheckable(true);
 
-        if (imgName[i] == "labelShow" || imgName[i] == "aimSwitch") {
+        if (d->m_btnsObjName[i] == "labelShow" || d->m_btnsObjName[i] == "aimSwitch") {
             btn->setCheckable(true);
             btn->setChecked(true);
         }
@@ -304,7 +301,7 @@ void WGraphicsWidget::iniPanel()
 
         //将按钮加到布局中
         layout->addWidget(btn);
-
+        d->m_btnList.push_back(btn);
         //绑定按钮单击事件,用来发出信号通知
         connect(btn, SIGNAL(clicked(bool)), this, SLOT(btnClicked()));
     }

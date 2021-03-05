@@ -8,6 +8,7 @@
 #include "cexecute.h"
 #include "QProgressDialog"
 #include "QColorDialog"
+#include "qscrollbar.h"
 
 #include "WAiConstant.h"
 
@@ -130,6 +131,12 @@ AiWidget::AiWidget(QWidget *parent) :
         if (!d->m_dataPro->getImages().size()) return;
         changeImages(d->m_index);
     });
+
+    //widgetd的
+    connect(d->labelWidget->view()->verticalScrollBar(), &QScrollBar::valueChanged, d->srcWidget->view()->verticalScrollBar(), &QScrollBar::setValue);
+    connect(d->srcWidget->view()->verticalScrollBar(), &QScrollBar::valueChanged, d->labelWidget->view()->verticalScrollBar(), &QScrollBar::setValue);
+    connect(d->labelWidget->view()->horizontalScrollBar(), &QScrollBar::valueChanged, d->srcWidget->view()->horizontalScrollBar(), &QScrollBar::setValue);
+    connect(d->srcWidget->view()->horizontalScrollBar(), &QScrollBar::valueChanged, d->labelWidget->view()->horizontalScrollBar(), &QScrollBar::setValue);
 }
 
 AiWidget::~AiWidget()

@@ -54,6 +54,9 @@ void WCircleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
             || d->m_cols > MAX)
         return;
 
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     QPen pen(d->m_outerColor, d->m_outerWidth);
     pen.setCosmetic(true);
     painter->setPen(pen);
