@@ -210,7 +210,37 @@
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true"/>
+           <string notr="true">QComboBox {
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding: 1px 2px 1px 2px;
+    background-color: rgb(230,230,230);
+}
+
+QComboBox::drop-down {
+	background-color: rgb(180,180,180);
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid;
+    border-top-right-radius: 3px; 
+    border-bottom-right-radius: 3px;
+}
+QComboBox::down-arrow {
+    image: url(:/aiImageIcon/aiImgIcon/down.png);
+}
+
+QComboBox QAbstractItemView
+{
+background-color:rgba(225, 225, 255, 180);
+height:1000px;
+border: 12px; 
+color: red; 
+selection-color: green;
+selection-background-color: rgb(210,210,210); 
+}</string>
           </property>
          </widget>
         </item>
@@ -293,7 +323,20 @@
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">gridline-color: rgb(255, 170, 0);</string>
+           <string notr="true">QPushButton{
+background-color:rgb(230,230,230);
+border-radius: 3px;
+border: 1px groove rgb(80, 80, 80)
+}
+
+QPushButton::hover{
+background-color:rgb(0, 153, 255, 60);
+}
+
+QPushButton:pressed{
+background-color: rgb(0, 153, 255,120);
+border-style: inset; 
+}</string>
           </property>
           <property name="text">
            <string>模型训练</string>

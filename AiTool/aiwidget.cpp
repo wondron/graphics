@@ -11,6 +11,7 @@
 #include "qscrollbar.h"
 #include <QMessageBox>
 #include "WAiConstant.h"
+#include "qpainter.h"
 
 #include <QtCharts/QChartView>
 #include <QtCharts/QSplineSeries>
@@ -427,7 +428,8 @@ void AiWidget::iniLayout()
     //美化外观
     iniSliderStyle(ui->m_hSliderpen);
     iniSliderStyle(ui->m_hSlidereraser);
-    inibtnStyle(ui->btn_trainModel);
+    //inibtnStyle(ui->btn_trainModel);
+    //iniCombx(ui->cmbx_colorSlct);
 }
 
 void AiWidget::initialData()
@@ -487,6 +489,17 @@ void AiWidget::inibtnStyle(QPushButton *btn)
                       );
 }
 
+void AiWidget::iniCombx(QComboBox *cmbx)
+{
+    cmbx->setStyleSheet(
+        "QComboBox {"
+        "border: 3px solid gray;"
+        "border-radius: 10px;"
+        "padding: 1px 2px 1px 2px;"
+        "min-width: 9em;"
+    );
+}
+
 void AiWidget::iniPd(const QString &text)
 {
     d->pd->reset();
@@ -500,15 +513,19 @@ void AiWidget::iniPd(const QString &text)
 void AiWidget::iniCombox()
 {
     ui->cmbx_colorSlct->setIconSize(QSize(CMBXSIZE, CMBXSIZE));
-    QPixmap pixmap(CMBXSIZE - 2, CMBXSIZE - 2);
-    pixmap.fill(d->preColor[0]);
-    ui->cmbx_colorSlct->insertItem(0, QIcon(pixmap), "");
-    pixmap.fill(d->preColor[1]);
-    ui->cmbx_colorSlct->insertItem(1, QIcon(pixmap), "");
-    pixmap.fill(d->preColor[2]);
-    ui->cmbx_colorSlct->insertItem(2, QIcon(pixmap), "");
-    pixmap.fill(d->preColor[3]);
-    ui->cmbx_colorSlct->insertItem(3, QIcon(pixmap), "");
+    int size = CMBXSIZE - 2;
+    QPixmap pixmap(size, size);
+    QPainter painter(&pixmap);
+    QBrush brush(Qt::transparent);
+    QPen pen(QColor(122,122,122), 2);
+
+    for(auto i : d->preColor){
+        painter.fillRect(0, 0, size-1, size-1, i);
+        painter.setBrush(brush);
+        painter.setPen(pen);
+        painter.drawRect(0,0,size,size);
+        ui->cmbx_colorSlct->insertItem(0, QIcon(pixmap), u8"");
+    }
     ui->cmbx_colorSlct->setCurrentIndex(0);
 }
 

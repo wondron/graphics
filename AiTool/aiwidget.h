@@ -110,6 +110,7 @@ private:
     //外观美化
     void iniSliderStyle(QSlider *slider);
     void inibtnStyle(QPushButton *btn);
+    void iniCombx(QComboBox *cmbx);
 
 private slots:
 
@@ -179,9 +180,7 @@ private slots:
     void on_m_hSliderpen_valueChanged(int value);
     void on_m_hSlidereraser_valueChanged(int value);
     void iniChart();
-
     void on_btn_back_clicked();
-
     void on_btn_next_clicked();
 
 private:

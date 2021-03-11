@@ -14,5 +14,6 @@
         <file>aiImgIcon/allBig.png</file>
         <file>aiImgIcon/allSmall.png</file>
         <file>aiImgIcon/help.png</file>
+        <file>aiImgIcon/down.png</file>
     </qresource>
 </RCC>
