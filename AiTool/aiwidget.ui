@@ -33,10 +33,13 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
-       <number>5</number>
+       <number>2</number>
       </property>
       <property name="topMargin">
        <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>3</number>
       </property>
       <item>
        <widget class="QPushButton" name="btn_open">
@@ -151,23 +154,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_9">
-        <property name="minimumSize">
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_6">
+       <widget class="QPushButton" name="btn_help">
         <property name="minimumSize">
          <size>
           <width>30</width>
@@ -196,73 +183,124 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>颜色选择</string>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <property name="spacing">
+         <number>10</number>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cmbx_colorSlct">
-        <property name="styleSheet">
-         <string notr="true"/>
+        <property name="leftMargin">
+         <number>0</number>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_pen">
-        <property name="styleSheet">
-         <string notr="true">selection-color: rgb(85, 255, 0);</string>
-        </property>
-        <property name="text">
-         <string>画笔大小:1</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="m_hSliderpen">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_eraser">
-        <property name="text">
-         <string>橡皮擦大小:1</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="m_hSlidereraser">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="chkbx_autoSave">
-        <property name="text">
-         <string>自动保存</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="chkbx_preSeg">
-        <property name="text">
-         <string>预标注</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_trainModel">
-        <property name="styleSheet">
-         <string notr="true">gridline-color: rgb(255, 170, 0);</string>
-        </property>
-        <property name="text">
-         <string>模型训练</string>
-        </property>
-       </widget>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <family>微软雅黑</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>颜色选择</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cmbx_colorSlct">
+          <property name="font">
+           <font>
+            <family>微软雅黑</family>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_pen">
+          <property name="font">
+           <font>
+            <family>微软雅黑</family>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">selection-color: rgb(85, 255, 0);</string>
+          </property>
+          <property name="text">
+           <string>画笔大小:1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="m_hSliderpen">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_eraser">
+          <property name="font">
+           <font>
+            <family>微软雅黑</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>橡皮擦大小:1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="m_hSlidereraser">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chkbx_autoSave">
+          <property name="font">
+           <font>
+            <family>微软雅黑</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>自动保存</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chkbx_preSeg">
+          <property name="font">
+           <font>
+            <family>微软雅黑</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>预标注</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_trainModel">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>微软雅黑</family>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">gridline-color: rgb(255, 170, 0);</string>
+          </property>
+          <property name="text">
+           <string>模型训练</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -304,6 +342,11 @@
          </property>
          <item>
           <widget class="QLabel" name="label_modelSlct">
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+            </font>
+           </property>
            <property name="text">
             <string>模型文件选择</string>
            </property>
@@ -314,6 +357,11 @@
          </item>
          <item>
           <widget class="QPushButton" name="btn_model">
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+            </font>
+           </property>
            <property name="text">
             <string>选择文件</string>
            </property>

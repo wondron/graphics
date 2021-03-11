@@ -2,12 +2,6 @@
     <qresource prefix="/new/icons">
         <file>image/aims.png</file>
         <file>image/printer.png</file>
-        <file>image/OpenGL.png</file>
-        <file>image/Antialiasing.png</file>
-        <file>image/ZoomIn.png</file>
-        <file>image/ZoomOut.png</file>
-        <file>image/Expand.png</file>
-        <file>image/centerDirection.png</file>
         <file>image/originalSize.png</file>
         <file>image/labelShow.png</file>
         <file>image/aimSwitch.png</file>
@@ -15,5 +9,12 @@
         <file>image/continue.png</file>
         <file>image/saveImg.png</file>
         <file>image/pamSet.png</file>
+        <file>image/antialiasing.png</file>
+        <file>image/centerOn.png</file>
+        <file>image/expand.png</file>
+        <file>image/openGL.png</file>
+        <file>image/translate.png</file>
+        <file>image/zoomIn.png</file>
+        <file>image/zoomOut.png</file>
     </qresource>
 </RCC>

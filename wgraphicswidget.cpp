@@ -48,13 +48,14 @@ public:
     WGraphicsView *view;
     WGraphicsScene *scene;
 
-    QList<QString> m_btnsObjName, m_tipName;
-    QList<QPushButton *>m_btnList;
-
     QString m_name;
     int m_fps;
     QString m_showText;
     QWidget *m_panel;
+
+    QList<QString> m_btnsObjName, m_tipName;
+    QList<QPushButton *> m_btnList;
+
     QColor flowBgColor;
     QColor flowPressColor;
 
@@ -274,16 +275,14 @@ void WGraphicsWidget::iniPanel()
         QPushButton *btn = new QPushButton;
         btn->setIconSize(QSize(ICONSIZE, ICONSIZE));
 
-        QString str = QString(":/icon/image/%1.png").arg(d->m_btnsObjName[i]);
+        QString str = QString(":/new/icons/image/%1.png").arg(d->m_btnsObjName[i]);
         btn->setIcon(QIcon(QPixmap(str)));
         btn->setToolTip(d->m_tipName[i]);
 
         //设置标识,用来区别按钮
         btn->setObjectName(d->m_btnsObjName.at(i));
-
-        if (d->m_btnsObjName[i] == "OpenGL" || d->m_btnsObjName[i] == "Antialiasing")
+        if (d->m_btnsObjName[i] == "openGL" || d->m_btnsObjName[i] == "antialiasing")
             btn->setCheckable(true);
-
         if (d->m_btnsObjName[i] == "labelShow" || d->m_btnsObjName[i] == "aimSwitch") {
             btn->setCheckable(true);
             btn->setChecked(true);
@@ -302,6 +301,7 @@ void WGraphicsWidget::iniPanel()
         //将按钮加到布局中
         layout->addWidget(btn);
         d->m_btnList.push_back(btn);
+
         //绑定按钮单击事件,用来发出信号通知
         connect(btn, SIGNAL(clicked(bool)), this, SLOT(btnClicked()));
     }

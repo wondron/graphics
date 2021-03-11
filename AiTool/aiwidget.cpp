@@ -9,7 +9,7 @@
 #include "QProgressDialog"
 #include "QColorDialog"
 #include "qscrollbar.h"
-
+#include <QMessageBox>
 #include "WAiConstant.h"
 
 #include <QtCharts/QChartView>
@@ -44,6 +44,12 @@ public:
         m_dataPro = new WDataPro();
         pd = new QProgressDialog("", u8"取消", 0, 100);
         pd->setValue(100);
+
+        m_Color = QColor(255, 0, 0);
+        preColor.push_back(QColor(255, 0, 0));
+        preColor.push_back(QColor(0, 255, 0));
+        preColor.push_back(QColor(255, 255, 0));
+        preColor.push_back(QColor(0, 0, 255));
     }
     ~AiWidetPrivate()
     {
@@ -104,7 +110,9 @@ AiWidget::AiWidget(QWidget *parent) :
     ui->setupUi(this);
     iniLayout();
     iniIcon();
-    //iniCombox();
+    iniCombox();
+    initialData();
+    installEventFilter(this);
 
     //信号对象的连接
     connect(d->signalObj, &CSignalObj::sendErr, [this](QString a) {
@@ -124,6 +132,12 @@ AiWidget::AiWidget(QWidget *parent) :
     connect(d->labelWidget->view(), &Graphics::WGraphicsView::scaleChanged, d->srcWidget->view(), &Graphics::WGraphicsView::zoom);
     connect(d->srcWidget->view(), &Graphics::WGraphicsView::scaleChanged, d->labelWidget->view(), &Graphics::WGraphicsView::zoom);
 
+    connect(d->labelWidget->view()->verticalScrollBar(), &QScrollBar::valueChanged, d->srcWidget->view()->verticalScrollBar(), &QScrollBar::setValue);
+    connect(d->srcWidget->view()->verticalScrollBar(), &QScrollBar::valueChanged, d->labelWidget->view()->verticalScrollBar(), &QScrollBar::setValue);
+    connect(d->labelWidget->view()->horizontalScrollBar(), &QScrollBar::valueChanged, d->srcWidget->view()->horizontalScrollBar(), &QScrollBar::setValue);
+    connect(d->srcWidget->view()->horizontalScrollBar(), &QScrollBar::valueChanged, d->labelWidget->view()->horizontalScrollBar(), &QScrollBar::setValue);
+
+
     connect(ui->listWidget, &QListWidget::clicked, [this](const QModelIndex & index) {
         d->m_lastIndex = d->m_index;
         d->m_index = index.row();
@@ -131,12 +145,6 @@ AiWidget::AiWidget(QWidget *parent) :
         if (!d->m_dataPro->getImages().size()) return;
         changeImages(d->m_index);
     });
-
-    //widgetd的
-    connect(d->labelWidget->view()->verticalScrollBar(), &QScrollBar::valueChanged, d->srcWidget->view()->verticalScrollBar(), &QScrollBar::setValue);
-    connect(d->srcWidget->view()->verticalScrollBar(), &QScrollBar::valueChanged, d->labelWidget->view()->verticalScrollBar(), &QScrollBar::setValue);
-    connect(d->labelWidget->view()->horizontalScrollBar(), &QScrollBar::valueChanged, d->srcWidget->view()->horizontalScrollBar(), &QScrollBar::setValue);
-    connect(d->srcWidget->view()->horizontalScrollBar(), &QScrollBar::valueChanged, d->labelWidget->view()->horizontalScrollBar(), &QScrollBar::setValue);
 }
 
 AiWidget::~AiWidget()
@@ -362,18 +370,22 @@ void AiWidget::iniIcon()
     QString str = ":/aiImageIcon/aiImgIcon/back.png";
     ui->btn_back->setIconSize(QSize(ICONSIZE * 2, ICONSIZE / 2));
     ui->btn_back->setIcon(QIcon(QPixmap(str)));
+    ui->btn_back->setShortcut(QString("up"));
 
     str = ":/aiImageIcon/aiImgIcon/next.png";
     ui->btn_next->setIconSize(QSize(ICONSIZE * 2, ICONSIZE / 2));
     ui->btn_next->setIcon(QIcon(QPixmap(str)));
+    ui->btn_next->setShortcut(QString("down"));
 
     QStringList list;
     list << "open" << "save" << "saveOne"
-         << "pen" << "polygon" << "delete" << "eraser";
+         << "pen" << "polygon" << "delete"
+         << "eraser" << "help";
 
     QList<QPushButton *> btnList;
     btnList << ui->btn_open << ui->btn_save << ui->btn_saveOne
-            << ui->btn_pen << ui->btn_polygon << ui->btn_delete << ui->btn_eraser;
+            << ui->btn_pen << ui->btn_polygon << ui->btn_delete
+            << ui->btn_eraser << ui->btn_help;
 
     for (int i = 0 ; i < list.size() ; i ++) {
         str = QString(":/aiImageIcon/aiImgIcon/%1.png").arg(list[i]);
@@ -383,19 +395,13 @@ void AiWidget::iniIcon()
     }
 
     SETICONBTN(ui->btn_open, u8"打开文件夹(f)", readImageTool, "f");
-    SETICONBTN(ui->btn_save, u8"保存当前图片(3)", saveOneTool, "3");
-    SETICONBTN(ui->btn_saveOne,  u8"全部保存(ctrl+shift+s)", saveTool, "ctrl+shift+s");
+    SETICONBTN(ui->btn_saveOne, u8"保存当前图片(3)", saveOneTool, "3");
+    SETICONBTN(ui->btn_save,  u8"全部保存(ctrl+shift+s)", saveTool, "ctrl+shift+s");
     SETICONBTN(ui->btn_pen,  u8"画笔工具(b)", usePenTool, "b");
     SETICONBTN(ui->btn_polygon,  u8"多边形工具(n)", usePolyTool, "n");
     SETICONBTN(ui->btn_eraser,  u8"橡皮擦(e)", useEraserTool, "e");
-    //SETICONBTN(biggerPen,  u8"增加画笔宽度(a)", useBiggerPenTool, "a");
-    //SETICONBTN(smallerPen,  u8"减小画笔宽度(s)", useSmallerPenTool, "s");
     SETICONBTN(ui->btn_delete, u8"删除(d)", deletePenTool, "d");
-    //SETICONBTN(itemBigger, u8"变宽当前画笔线条(9)", itemBiggerTool, "9");
-    //SETICONBTN(itemSmaller, u8"变窄当前画笔线条(8)", itemSmallerTool, "8");
-    //SETICONBTN(allBigger, u8"变宽所有画笔线条(2)", allItemBiggerTool, "2");
-    //SETICONBTN(allSmall, u8"变窄所有画笔线条(5)", allItemSmallerTool, "5");
-    //SETICONBTN(allChangecolor, u8"改变所有颜色(c)", changeAllColorTool, "c");
+    SETICONBTN(ui->btn_help, u8"获取帮助(h)", showHelpInfo, "h");
 }
 
 void AiWidget::iniLayout()
@@ -410,13 +416,18 @@ void AiWidget::iniLayout()
     ui->listWidget->setMovement(QListView::Static);
     ui->listWidget->setSpacing(10);
 
+    ui->grpBx_model->setVisible(false);//关闭模型训练窗口
+
+    //关闭辅助显示功能
     d->labelWidget->setLabelShow(false);
     d->srcWidget->setLabelShow(false);
-
     d->labelWidget->setAimShow(false);
     d->srcWidget->setAimShow(false);
 
-    ui->grpBx_model->setVisible(false);
+    //美化外观
+    iniSliderStyle(ui->m_hSliderpen);
+    iniSliderStyle(ui->m_hSlidereraser);
+    inibtnStyle(ui->btn_trainModel);
 }
 
 void AiWidget::initialData()
@@ -433,11 +444,47 @@ void AiWidget::initialData()
     ui->listWidget->clear();
     d->m_lastIndex = 0;
     d->m_index = 0;
+
     ui->m_hSlidereraser->setEnabled(false);
     ui->m_hSlidereraser->setValue(5);
     ui->m_hSliderpen->setEnabled(false);
     ui->m_hSliderpen->setValue(1);
     ui->label_pen->setText(QString::asprintf(u8"画笔大小: %d", ui->m_hSliderpen->value()));
+}
+
+void AiWidget::iniSliderStyle(QSlider *slider)
+{
+    slider->setStyleSheet( {
+        "QSlider::groove:horizontal {"
+        "height: 3px;"
+        "background: qlineargradient(x1: 0, y1: 1, x2: 1, y2: 0, "
+        "stop: 0  rgb(92, 91, 160)"
+        "stop: 1.0 rgb(210, 210, 210));"
+        "}"
+
+        "QSlider::handle:horizontal {"
+        "width: 10px;"
+        "background: rgb(130,160,255);"
+        "margin: -6px 0px -6px 0px;"
+        "border-radius: 5px;"
+        "}"
+
+        "QSlider::handle:pressed{background-color:rgb(120, 95, 0);}"
+    });
+}
+
+void AiWidget::inibtnStyle(QPushButton *btn)
+{
+    btn->setStyleSheet("QPushButton{"
+                       "background-color:rgb(130,160,255);"
+                       "border-radius: 5px;"
+                       "border: 2px groove rgb(120, 120, 150)"
+                       "} "
+                       //"QPushButton:hover{background-color:white; color: black;}"
+                       "QPushButton:pressed{background-color:rgb(120, 95, 0);"
+                       //"border-style: inset; "
+                       "}"
+                      );
 }
 
 void AiWidget::iniPd(const QString &text)
@@ -453,7 +500,7 @@ void AiWidget::iniPd(const QString &text)
 void AiWidget::iniCombox()
 {
     ui->cmbx_colorSlct->setIconSize(QSize(CMBXSIZE, CMBXSIZE));
-    QPixmap pixmap(20, 20);
+    QPixmap pixmap(CMBXSIZE - 2, CMBXSIZE - 2);
     pixmap.fill(d->preColor[0]);
     ui->cmbx_colorSlct->insertItem(0, QIcon(pixmap), "");
     pixmap.fill(d->preColor[1]);
@@ -479,7 +526,6 @@ void AiWidget::changeImages(const int index)
             a += saveOneBmp(d->m_lastIndex);
             a += d->m_dataPro->jsonWrite(d->m_lastIndex);
             QString msg = a ? u8"单张图像保存失败" : u8"单张图像保存成功";
-            qDebug() << msg;
         });
     }
 }
@@ -497,9 +543,9 @@ void AiWidget::changeItems(const int index)
     }
     if (d->m_widgetPath.contains(index)) {
         for (auto item : d->m_widgetPath.values(index)) {
-            //ui->m_hSlidereraser->isEnabled() ? item->setEraserMode() : item->setDrawMode();
-            //item->setPenWidth(ui->m_hSliderpen->value());
-            //item->setEraserWidth(ui->m_hSlidereraser->value());
+            ui->m_hSlidereraser->isEnabled() ? item->setEraserMode() : item->setDrawMode();
+            item->setPenWidth(ui->m_hSliderpen->value());
+            item->setEraserWidth(ui->m_hSlidereraser->value());
             d->labelWidget->currentScene()->addItem(item);
             item->changeBoundingRect();
             d->m_path.push_back(item);
@@ -598,6 +644,37 @@ void AiWidget::changeItemWidth(const int penWidth, const int eraserWidth)
     }
 }
 
+bool AiWidget::event(QEvent *e)
+{
+    if (e->type() == QEvent::KeyPress) {
+        QKeyEvent *event = static_cast<QKeyEvent *>(e);
+        switch (event->key()) {
+        case Qt::Key_A:
+            useBiggerPenTool();
+            return false;
+        case Qt::Key_S:
+            useSmallerPenTool();
+            return false;
+        case Qt::Key_9:
+            itemBiggerTool();
+            return false;
+        case Qt::Key_8:
+            itemSmallerTool();
+            return false;
+        case Qt::Key_2:
+            allItemBiggerTool();
+            return false;
+        case Qt::Key_5:
+            allItemSmallerTool();
+            return false;
+        case Qt::Key_C:
+            changeAllColorTool();
+            return false;
+        }
+    }
+    return QWidget::event(e);
+}
+
 void AiWidget::readImageTool()
 {
     QString directory = QFileDialog::getExistingDirectory(this, u8"选择图片文件夹");
@@ -617,7 +694,6 @@ void AiWidget::readImageTool()
         for (int i = 0; i < list.size(); i++) {
             d->m_dataPro->addFileName(list[i].fileName());
             QPixmap objPixmap(list[i].absoluteFilePath());
-            qDebug() << list[i];
             qreal pixra = (((qreal)objPixmap.height()) / ((qreal)objPixmap.width()));
             d->m_dataPro->addImage(objPixmap);
             Async::CExecute(true) <= [ = ]() {
@@ -644,7 +720,6 @@ void AiWidget::saveOneTool(bool showDialog)
         datatoDataPro();
         d->m_dataPro->clearJsonFile(d->m_index);
         int a = 0;
-        qDebug() << "start save one bmp, index:" << d->m_index;
         a += saveOneBmp(d->m_index);
         a += d->m_dataPro->jsonWrite(d->m_index);
         QString msg = a ? u8"单张图像保存失败" : u8"单张图像保存成功";
@@ -856,7 +931,60 @@ void AiWidget::changeAllColorTool()
     d->labelWidget->currentScene()->update();
 }
 
+void AiWidget::showHelpInfo()
+{
+    QString str =
+        u8"打开文件夹(f)\n"
+        u8"保存当前图片(3)\n"
+        u8"全部保存(ctrl+shift+s)\n"
+        u8"画笔工具(b)\n"
+        u8"多边形工具(n)\n"
+        u8"橡皮擦(e)\n"
+        u8"增加画笔宽度(a)\n"
+        u8"减小画笔宽度(s)\n"
+        u8"删除(d)\n"
+        u8"变宽当前画笔线条(9)\n"
+        u8"变窄当前画笔线条(8)\n"
+        u8"变宽所有画笔线条(2)\n"
+        u8"变窄所有画笔线条(5)\n"
+        u8"改变所有颜色(c)";
+
+    QMessageBox::information(this, u8"快捷键说明", str);
+}
+
 void AiWidget::iniChart()
 {
 
+}
+
+void AiWidget::on_m_hSliderpen_valueChanged(int value)
+{
+    ui->label_pen->setText(QString(u8"画笔大小:%1").arg(value));
+    for (auto i : d->m_path) {
+        i->setPenWidth(value);
+    }
+}
+
+void AiWidget::on_m_hSlidereraser_valueChanged(int value)
+{
+    ui->label_pen->setText(QString(u8"橡皮擦大小:%1").arg(value));
+    for (auto i : d->m_path) {
+        i->setEraserWidth(value);
+    }
+}
+
+void AiWidget::on_btn_back_clicked()
+{
+    CHECKERR(!d->m_dataPro->getFileName().size(), u8"请先打开图片！");
+    if (d->m_index == 0) return;
+    d->m_lastIndex = d->m_index;
+    changeImages(--d->m_index);
+}
+
+void AiWidget::on_btn_next_clicked()
+{
+    CHECKERR(!d->m_dataPro->getFileName().size(), u8"请先打开图片！");
+    if (d->m_index + 1 == ui->listWidget->count()) return;
+    d->m_lastIndex = d->m_index;
+    changeImages(++d->m_index);
 }

@@ -2,6 +2,8 @@
 
 #include <QMainWindow>
 #include "QFileInfoList"
+#include <QSlider>
+#include <QPushButton>
 #include "../items/wpathitem.h"
 #include "../items/wpolyitem.h"
 
@@ -29,7 +31,7 @@ class AiWidget : public QMainWindow
     Q_OBJECT
 
 public:
-    enum {CMBXSIZE = 20, ICONSIZE = 25, IMGSIZE = 128};
+    enum {CMBXSIZE = 15, ICONSIZE = 25, IMGSIZE = 128};
     explicit AiWidget(QWidget *parent = nullptr);
     ~AiWidget();
 
@@ -95,16 +97,21 @@ private:
      */
     void initialData();
 
-private slots:
+    /**
+       @brief iniCombox:初始化颜色选择框
+    */
+    void iniCombox();
+
     /**
      * @brief 初始化进度栏对话框
      */
     void iniPd(const QString &text);
 
-    /**
-       @brief iniCombox:初始化颜色选择框
-    */
-    void iniCombox();
+    //外观美化
+    void iniSliderStyle(QSlider *slider);
+    void inibtnStyle(QPushButton *btn);
+
+private slots:
 
     /**
      * @brief changeImages: 切换图片显示序号
@@ -150,9 +157,12 @@ private slots:
      */
     void changeItemWidth(const int penWidth, const int eraserWidth);
 
+protected:
+    bool event(QEvent *e) override;
+
 private slots:
     void readImageTool();
-    void saveOneTool(bool showDialog);
+    void saveOneTool(bool showDialog = true);
     void saveTool();
     void usePenTool();
     void useEraserTool();
@@ -165,7 +175,14 @@ private slots:
     void allItemBiggerTool();
     void allItemSmallerTool();
     void changeAllColorTool();
+    void showHelpInfo();
+    void on_m_hSliderpen_valueChanged(int value);
+    void on_m_hSlidereraser_valueChanged(int value);
     void iniChart();
+
+    void on_btn_back_clicked();
+
+    void on_btn_next_clicked();
 
 private:
     Ui::AiWidget *ui;

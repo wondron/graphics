@@ -48,6 +48,9 @@ WCircleItem::WCircleItem(QPointF center, qreal radius) :
 
 void WCircleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     if (d->m_rows < MIN
             || d->m_rows > MAX
             || d->m_cols < MIN
