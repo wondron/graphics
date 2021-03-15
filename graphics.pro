@@ -15,6 +15,7 @@ qtHaveModule(opengl): QT += opengl
 include(aitool/aitool.pri)
 include(camTool/camTool.pri)
 include(items/items.pri)
+include(autoType/autoType.pri)
 
 SOURCES += \
     main.cpp \

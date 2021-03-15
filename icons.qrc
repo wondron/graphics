@@ -1,20 +1,21 @@
 <RCC>
-    <qresource prefix="/new/icons">
-        <file>image/aims.png</file>
-        <file>image/printer.png</file>
-        <file>image/originalSize.png</file>
-        <file>image/labelShow.png</file>
-        <file>image/aimSwitch.png</file>
-        <file>image/camera.png</file>
-        <file>image/continue.png</file>
-        <file>image/saveImg.png</file>
-        <file>image/pamSet.png</file>
-        <file>image/antialiasing.png</file>
-        <file>image/centerOn.png</file>
-        <file>image/expand.png</file>
-        <file>image/openGL.png</file>
-        <file>image/translate.png</file>
+    <qresource prefix="/new/icons"/>
+    <qresource prefix="/icon">
         <file>image/zoomIn.png</file>
+        <file>image/aims.png</file>
+        <file>image/antialiasing.png</file>
+        <file>image/camera.png</file>
+        <file>image/centerOn.png</file>
+        <file>image/continue.png</file>
+        <file>image/expand.png</file>
+        <file>image/labelShow.png</file>
+        <file>image/openGL.png</file>
+        <file>image/originalSize.png</file>
+        <file>image/pamSet.png</file>
+        <file>image/printer.png</file>
+        <file>image/saveImage.png</file>
+        <file>image/translate.png</file>
         <file>image/zoomOut.png</file>
+        <file>image/aimSwitch.png</file>
     </qresource>
 </RCC>

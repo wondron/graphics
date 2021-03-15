@@ -275,7 +275,7 @@ void WGraphicsWidget::iniPanel()
         QPushButton *btn = new QPushButton;
         btn->setIconSize(QSize(ICONSIZE, ICONSIZE));
 
-        QString str = QString(":/new/icons/image/%1.png").arg(d->m_btnsObjName[i]);
+        QString str = QString(":/icon/image/%1.png").arg(d->m_btnsObjName[i]);
         btn->setIcon(QIcon(QPixmap(str)));
         btn->setToolTip(d->m_tipName[i]);
 
@@ -341,7 +341,7 @@ void WGraphicsWidget::initAimWidget()
     d->m_aimLabel->setObjectName("aimLabel");
     d->m_aimLabel->installEventFilter(this);
     d->m_aimLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-    QImage img(":/new/icons/image/aims.png");
+    QImage img(":/icon/image/aims.png");
     d->m_aimLabel->setFixedSize(img.width(), img.height());
     d->m_aimLabel->setPixmap(QPixmap::fromImage(img));
 }
