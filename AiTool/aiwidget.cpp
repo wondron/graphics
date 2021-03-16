@@ -466,7 +466,7 @@ void AiWidget::iniSliderStyle(QSlider *slider)
 
         "QSlider::handle:horizontal {"
         "width: 10px;"
-        "background: rgb(130,160,255);"
+        "background: rgb(0,160,255);"
         "margin: -6px 0px -6px 0px;"
         "border-radius: 5px;"
         "}"
