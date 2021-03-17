@@ -16,6 +16,7 @@ include(aitool/aitool.pri)
 include(camTool/camTool.pri)
 include(items/items.pri)
 include(autoType/autoType.pri)
+include(opencv/opencv.pri)
 
 SOURCES += \
     main.cpp \
@@ -43,4 +44,3 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     icons.qrc
-

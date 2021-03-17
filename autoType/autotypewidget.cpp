@@ -32,6 +32,8 @@ autoTypeWidget::autoTypeWidget(QWidget *parent) :
     QImage img = QImage(100,100, QImage::Format_Grayscale8);
     img.fill(200);
     d->m_widget->setImage(img);
+
+    //cv::Mat mat(20, 20, CV_8UC1);
 }
 
 autoTypeWidget::~autoTypeWidget()
